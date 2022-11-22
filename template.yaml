@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: AWS-SAM-APIGW-Lambda-DDB
+
+Globals:
+  Function:
+    Runtime: java11
+    #Память выделяемая для каждого процесса
+    MemorySize: 3007
+    Timeout: 25
+
+  Api:
+    OpenApiVersion: '3.0.1'
+
+Resources:
+  #Ranked API Gateway
+  #Stage name: dev
+  rankedAPIGateway:
+    Type: AWS::Serverless::API
+    Properties:
+      StageName: dev
+      Name: ranked-api-gateway
+  #Ranked Lambda Function
+  rankedUpdateLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: rankedUpdate
+      Handler: com.kramarenko.RankedUpdateFunction::handleRequest
+      CodeUri: target/java-back.zip
+      Policies:
+        - DynamoDBCrudPolicy:
+          TableName: !Ref rankedDDBTable
+      Environment:
+        Variables:
+          TABLE: !Ref rankedDDBTable
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /gameResult
+            Method: POST
+            RestApiId: !Ref rankedAPIGateway
+
+  rankedGetLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: rankedGet
+      Handler: com.kramarenko.RankedUpdateFunction::handleRequest
+      CodeUri: target/java-back.zip
+      #List of policies
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref rankedDDBTable
+      Environment:
+        Variables:
+          TABLE: !Ref rankedDDBTable
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /gameResult/{id}
+            Method: GET
+            RestApiId: !Ref rankedAPIGateway
+
+  #Ranked DynamoDB table #у клауд формэйшн - інакше
+  rankedDDBTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: ranked
+      PrimaryKey:
+        Name: userId
+        Type: Number
+
+Outputs:
+  RankedGetEndpoint:
+    Value:
+      Fn::Sub: https://${rankedAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/gameResult/{id}
+  RankedUpdateEndpoint:
+    Value:
+      FN::Sub: https://${rankedApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/gameResult

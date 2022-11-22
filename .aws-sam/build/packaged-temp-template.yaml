@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: com.kramarenko.RankedUpdateFunction::handleRequest
+      CodeUri: s3://demovirginia/9c32954d86063e650b583486502148f7
+      Runtime: java11
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function

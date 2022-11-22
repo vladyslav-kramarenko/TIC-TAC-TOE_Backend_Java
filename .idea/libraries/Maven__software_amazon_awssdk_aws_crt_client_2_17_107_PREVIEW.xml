@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: software.amazon.awssdk:aws-crt-client:2.17.107-PREVIEW">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-crt-client/2.17.107-PREVIEW/aws-crt-client-2.17.107-PREVIEW.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-crt-client/2.17.107-PREVIEW/aws-crt-client-2.17.107-PREVIEW-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-crt-client/2.17.107-PREVIEW/aws-crt-client-2.17.107-PREVIEW-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
